@@ -1,11 +1,11 @@
   applications:
   - name: djangoapp
     routes:
-      - route: priya-capstone.us-south.mybluemix.net
+      - route: priya-capstone.mybluemix.net
     memory: 128M
     buildpack: python_buildpack
   - name: djangoapp-nginx
     routes:
-      - route: priya-capstone.us-south.mybluemix.net/static
+      - route: priya-capstone.mybluemix.net/static
     memory: 128M
     buildpack: staticfile_buildpack
