@@ -4,6 +4,7 @@
 
 const { CloudantV1 } = require('@ibm-cloud/cloudant');
 const { IamAuthenticator } = require('ibm-cloud-sdk-core');
+const express = require("express");
 
 function main(params) {
 
@@ -14,7 +15,9 @@ function main(params) {
     cloudant.setServiceUrl(params.COUCH_URL);
 
     let dbListPromise = getDbs(cloudant);
-    return dbListPromise;
+
+    return getMatchingRecords(cloudant, "dealerships", { "st": "CA"});
+    // return dbListPromise;
 }
 
 function getDbs(cloudant) {
@@ -39,7 +42,12 @@ function getDbs(cloudant) {
      return new Promise((resolve, reject) => {
          cloudant.postFind({db:dbname,selector:selector})
                  .then((result)=>{
-                   resolve({result:result.result.docs});
+                   const mapping = result.result.docs.map(r => {
+                    //eliminating _id and _rev from the response
+                    const {_id, _rev, ...y} = r;
+                    return y;
+                });
+                resolve({ result: mapping });
                  })
                  .catch(err => {
                     console.log(err);
@@ -52,15 +60,21 @@ function getDbs(cloudant) {
  /*
  Sample implementation to get all the records in a db.
  */
- function getAllRecords(cloudant,dbname) {
-     return new Promise((resolve, reject) => {
-         cloudant.postAllDocs({ db: dbname, includeDocs: true, limit: 10 })            
-             .then((result)=>{
-               resolve({result:result.result.rows});
-             })
-             .catch(err => {
+function getAllRecords(cloudant, dbname) {
+    return new Promise((resolve, reject) => {
+        cloudant.postAllDocs({ db: dbname, includeDocs: true, limit: 10 })
+            .then((result) => {
+               
+                const mapping = result.result.rows.map(r => {
+                    //eliminating _id and _rev from the response
+                    const {_id, _rev, ...y} = r.doc;
+                    return y;
+                });
+                resolve({ result: mapping });
+            })
+            .catch(err => {
                 console.log(err);
                 reject({ err: err });
-             });
-         })
- }
+            });
+    })
+}
