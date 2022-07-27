@@ -7,14 +7,16 @@ from requests.auth import HTTPBasicAuth
 # Create a `get_request` to make HTTP GET requests
 # e.g., response = requests.get(url, params=params, headers={'Content-Type': 'application/json'},
 #                                     auth=HTTPBasicAuth('apikey', api_key))
-def get_request(url, api_key=None, **kwargs):
+def get_request(url, **kwargs):
     print(kwargs)
+    params = kwargs['params'] if 'params' in kwargs.keys() else None
+    api_key = kwargs['api_key'] if 'api_key' in kwargs.keys() else None
     print("GET from {} ".format(url))
     try:
         # Call get method of requests library with URL and parameters
         if api_key:
             response = requests.get(url, headers={'Content-Type': 'application/json'},
-                                    params=kwargs, auth=HTTPBasicAuth('akikey', api_key))
+                                    params=params, auth=HTTPBasicAuth('apikey', api_key))
 
         else: 
             response = requests.get(url, headers={'Content-Type': 'application/json'},
@@ -93,6 +95,7 @@ def get_dealer_reviews_from_cf(url, dealerId):
             # Get its content in `doc` object
             # dealer_doc = dealer["doc"]
             # Create a CarDealer object with values in `doc` object
+            sentiment = analyze_review_sentiments(review["review"])
             review_obj = DealerReview(dealership=review["dealership"], purchase=review["purchase"], review=review["review"],
                                     purchase_date=review["purchase_date"], car_make=review["car_make"],
                                    name=review["name"],
@@ -107,12 +110,20 @@ def analyze_review_sentiments(text):
 # - Call get_request() with specified arguments
 # - Get the returned sentiment label such as Positive or Negative
     params = dict()
-    params["text"] = kwargs["text"]
-    params["version"] = kwargs["version"]
-    params["features"] = kwargs["features"]
-    params["return_analyzed_text"] = kwargs["return_analyzed_text"]
-    response = requests.get(url, params=params, headers={'Content-Type': 'application/json'},
-                                    auth=HTTPBasicAuth('apikey', api_key))
+    params['text'] = text
+    params['return_analyzed_text'] = True
+    params['features'] = ['sentiment']
+    params['version'] = '2022-04-07'
+    
 
+    url = ''
+    api_key = ''
+    #response = requests.get(url, params=params, headers={'Content-Type': 'application/json'},
+    #                                auth=HTTPBasicAuth('apikey', api_key))
+    
+    json_result = get_request(url, params=params, api_key=api_key)
+
+    if json_result:
+        print(json_result)
 
 
