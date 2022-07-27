@@ -104,8 +104,7 @@ def get_dealerships(request):
         return HttpResponse(dealer_names)
 
 
-# Create a `get_dealer_details` view to render the reviews of a dealer
-def get_dealer_details(request, state):
+def get_dealers_by_state(request, state):
     if request.method == "GET":
         url = "https://6c22589a.us-south.apigw.appdomain.cloud/api/dealership"
         # Get dealers from the URL
@@ -114,6 +113,15 @@ def get_dealer_details(request, state):
         dealer_names = ' '.join([dealer.short_name for dealer in dealerships])
         # Return a list of dealer short name
         return HttpResponse(dealer_names)
+
+
+# Create a `get_dealer_details` view to render the reviews of a dealer
+def get_dealer_details(request, dealer_id):
+    if request.method == "GET":
+        url = "https://6c22589a.us-south.apigw.appdomain.cloud/api/review"
+        reviews = get_dealer_reviews_from_cf(url, dealer_id)
+        reviewer_names = ' '.join([review.review for review in reviews])
+        return HttpResponse(reviewer_names)
 
 # Create a `add_review` view to submit a review
 # def add_review(request, dealer_id):
