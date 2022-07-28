@@ -121,9 +121,35 @@ def get_dealer_details(request, dealer_id):
         url = "https://6c22589a.us-south.apigw.appdomain.cloud/api/review"
         reviews = get_dealer_reviews_from_cf(url, dealer_id)
         reviewer_names = ' '.join([review.review for review in reviews])
-        return HttpResponse(reviewer_names)
+        review_sentiments = ' '.join([review.sentiment for review in reviews])
+        return HttpResponse(reviewer_names + ' ' + review_sentiments)
 
 # Create a `add_review` view to submit a review
-# def add_review(request, dealer_id):
-# ...
+def add_review(request, dealer_id):
+    user = request.user
+    if user.is_authenticated and request.method == 'POST':
+        url = "https://6c22589a.us-south.apigw.appdomain.cloud/api/review"
+        review = dict()
+        review['purchase_date'] = datetime.utcnow().isoformat()
+        review['dealership'] = 17
+        review['review'] = 'Amazing!'
+        review['name'] = 'priyaDutta'
+        review['purchase'] = True
+        review['car_make'] = 'audii'
+        review['car_model'] = 'car'
+        review['car_year'] = '2003'
+        review['id'] = 123957
+ 
+        json_payload = dict()
+        json_payload['review'] = review
+        postreview = post_request(url, json_payload=json_payload)
 
+        if postreview:
+            print(postreview)
+            return HttpResponse('<h1>posted</h1>')
+        else:
+            return HttpResponse('<h1>failed</h1>')
+        
+    else:
+        return HttpResponse('<h1>login failed</h1>')
+ 
