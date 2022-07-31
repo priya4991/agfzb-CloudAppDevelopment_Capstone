@@ -20,6 +20,7 @@
     <!-- This is the index page of your Django app! -->
     <!--Add a nav bar here -->
     <nav class="navbar navbar-light bg-light">
+        
         <div class="container-fluid">
             <div class="navbar-header">
                 <a class="navbar-brand" href="#">Dealership Reviews</a>
@@ -57,7 +58,39 @@
         </div>
     </nav>
     <!--Add a dealer table here -->
+    <!--  -->
+    <table class="table" id="table" data-filter-control="true">
+        <thead>
+            <tr>
+                <th data-field="id">ID</th>
+                <th data-field="id">Dealer Name</th>
+                <th data-field="id">City</th>
+                <th data-field="id">Address</th>
+                <th data-field="id">Zip</th>
+                <th data-field="id" data-filter-control="select">State</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for dealer in dealerships %}
+                <tr>
+                    <td>{{dealer.id}}</td>
+                    <td><a href="{% url 'djangoapp:dealer_details' dealer.id %}">{{dealer.full_name}}</a></td>
+                    <td>{{dealer.city}}</td>
+                    <td>{{dealer.address}}</td>
+                    <td>{{dealer.zip}}</td>
+                    <td>{{dealer.state}}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 
+    <!--  -->
 </body>
+
+<script>
+    $(function() {
+      $('#table').bootstrapTable()
+    })
+</script>
 
 </html>
