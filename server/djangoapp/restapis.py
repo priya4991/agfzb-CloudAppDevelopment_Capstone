@@ -24,7 +24,7 @@ def get_request(url, **kwargs):
     except:
         # If any error occurs
         print("Network exception occurred")
-    status_code = response.status_code
+    #status_code = response.status_code
     print("With status {} ".format(status_code))
     json_data = json.loads(response.text)
     return json_data
@@ -101,7 +101,7 @@ def get_dealer_reviews_from_cf(url, dealerId):
     results = []
     # Call get_request with a URL parameter
     json_result = get_request(url, dealerId=dealerId)
-    if json_result:
+    if json_result and "reviews" in json_result.keys():
         # Get the row list in JSON as dealers
         reviews = json_result["reviews"]
         # For each dealer object
