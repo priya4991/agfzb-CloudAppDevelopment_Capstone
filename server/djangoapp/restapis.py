@@ -21,13 +21,15 @@ def get_request(url, **kwargs):
         else: 
             response = requests.get(url, headers={'Content-Type': 'application/json'},
                                     params=kwargs)
+        status_code = response.status_code
+        print("With status {} ".format(status_code))
+        json_data = json.loads(response.text)
+        print(json_data)
+        return json_data
     except:
         # If any error occurs
         print("Network exception occurred")
-    #status_code = response.status_code
-    print("With status {} ".format(status_code))
-    json_data = json.loads(response.text)
-    return json_data
+    
 
 
 # Create a `post_request` to make HTTP POST requests
