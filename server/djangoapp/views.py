@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404, render, redirect
-# from .models import related models
+from .models import CarMake, CarModel
 from .restapis import *
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
@@ -32,7 +32,6 @@ def contact(request):
 
 # Create a `login_request` view to handle sign in request
 def login_request(request):
-    print ('123')
     context = {}
     # Handles POST request
     if request.method == "POST":
@@ -163,6 +162,14 @@ def add_review(request, dealer_id):
         else:
             return HttpResponse('<h1>failed</h1>')
         
-    else:
-        return HttpResponse('<h1>login failed</h1>')
+    elif request.method == 'GET':
+        context = {}
+        carmakes = CarModel.objects.all()
+        fieldobj = CarModel._meta.get_field('dealerId')
+        for car in carmakes:
+            name = fieldobj.value_from_object(car)
+            print(name)
+            print(car)
+
+        return HttpResponse('<h1>failed</h1>')
  

@@ -8,7 +8,6 @@ from requests.auth import HTTPBasicAuth
 # e.g., response = requests.get(url, params=params, headers={'Content-Type': 'application/json'},
 #                                     auth=HTTPBasicAuth('apikey', api_key))
 def get_request(url, **kwargs):
-    print(kwargs)
     params = kwargs['params'] if 'params' in kwargs.keys() else None
     api_key = kwargs['api_key'] if 'api_key' in kwargs.keys() else None
     print("GET from {} ".format(url))
@@ -24,7 +23,6 @@ def get_request(url, **kwargs):
         status_code = response.status_code
         print("With status {} ".format(status_code))
         json_data = json.loads(response.text)
-        print(json_data)
         return json_data
     except:
         # If any error occurs
@@ -35,7 +33,6 @@ def get_request(url, **kwargs):
 # Create a `post_request` to make HTTP POST requests
 # e.g., response = requests.post(url, params=kwargs, json=payload)
 def post_request(url, **kwargs):
-    print(kwargs)
     print("GET from {} ".format(url))
     json_payload = kwargs['json_payload']
     try:

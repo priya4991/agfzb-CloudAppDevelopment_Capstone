@@ -27,7 +27,7 @@
 
                 {% if user.is_authenticated %}
     <li>
-        ho
+        <a href="{% url 'djangoapp:add_review' dealer.id %}">Add review</a>
          
     </li>
     {% else %} 
