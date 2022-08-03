@@ -164,11 +164,18 @@ def add_review(request, dealer_id):
         
     elif request.method == 'GET':
         context = {}
-        carmakes = CarModel.objects.all()
-        fieldobj = CarModel._meta.get_field('dealerId')
-        for car in carmakes:
-            name = fieldobj.value_from_object(car)
-            print(name)
+        carmakes = CarMake.objects.all()
+        cars = {}
+        
+        fieldobjcarmake = CarMake._meta.get_field('name')
+        fieldobjcarmodel = CarModel._meta.get_field('name')
+        for index, car in carmakes:
+            car['id'] = index
+            car['name'] = car
+            carmodels = car.carmodel_set.all()
+            print(carmodels)
+            #name = fieldobj.value_from_object(car)
+            #print(name)
             print(car)
 
         return HttpResponse('<h1>failed</h1>')
