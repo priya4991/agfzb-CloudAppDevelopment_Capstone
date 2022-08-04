@@ -158,25 +158,36 @@ def add_review(request, dealer_id):
 
         if postreview:
             print(postreview)
-            return HttpResponse('<h1>posted</h1>')
+            return redirect("djangoapp:dealer_details", dealer_id=dealer_id)
         else:
             return HttpResponse('<h1>failed</h1>')
         
     elif request.method == 'GET':
+        print('get request')
         context = {}
         carmakes = CarMake.objects.all()
-        cars = {}
+        cars = []
         
         fieldobjcarmake = CarMake._meta.get_field('name')
-        fieldobjcarmodel = CarModel._meta.get_field('name')
-        for index, car in carmakes:
-            car['id'] = index
-            car['name'] = car
+        namecarmodel = CarModel._meta.get_field('name')
+        yearcarmodel = CarModel._meta.get_field('year')
+        for car in carmakes:
+            print('cars are')
+            print(cars)
             carmodels = car.carmodel_set.all()
-            print(carmodels)
+            
+            for model in carmodels: 
+                carObj = {}
+                carObj['name'] = namecarmodel.value_from_object(model)
+                carObj['year'] = yearcarmodel.value_from_object(model).strftime("%Y")
+                carObj['make'] = fieldobjcarmake.value_from_object(car)
+                cars.append(carObj)
+                print(carObj)
+                print(cars)
             #name = fieldobj.value_from_object(car)
             #print(name)
-            print(car)
-
-        return HttpResponse('<h1>failed</h1>')
+            
+        
+        context['cars'] = cars
+        return render(request, 'djangoapp/add_review.html', context)
  
