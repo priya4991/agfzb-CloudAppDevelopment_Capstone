@@ -142,16 +142,17 @@ def add_review(request, dealer_id):
     if user.is_authenticated and request.method == 'POST':
         url = "https://6c22589a.us-south.apigw.appdomain.cloud/api/review"
         review = dict()
-        review['purchase_date'] = datetime.utcnow().isoformat()
-        review['dealership'] = 17
-        review['review'] = 'Amazing!'
+        review['purchase_date'] = request.POST['purchasedate']
+        review['dealership'] = 7
+        review['review'] = request.POST['content']
         review['name'] = 'priyaDutta'
-        review['purchase'] = True
+        review['purchase'] = request.POST['purchasecheck']
         review['car_make'] = 'audii'
         review['car_model'] = 'car'
         review['car_year'] = '2003'
-        review['id'] = 123957
- 
+        review['id'] = 12395789
+        print("type of car")
+        print(request.POST['car'])
         json_payload = dict()
         json_payload['review'] = review
         postreview = post_request(url, json_payload=json_payload)
