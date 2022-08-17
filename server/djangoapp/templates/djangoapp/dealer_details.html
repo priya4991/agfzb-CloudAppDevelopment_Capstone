@@ -27,7 +27,7 @@
 
                 {% if user.is_authenticated %}
     <li>
-        <a href="{% url 'djangoapp:add_review' 7 %}">Add review</a>
+        <a href="{% url 'djangoapp:add_review' dealer_id %}">Add review</a>
          
     </li>
     {% else %} 
@@ -49,6 +49,7 @@
         </div>
     </nav>
     <!-- Add reviews as cards -->
+    {% if reviews|length > 0 %}
     <div class="card-columns">
         {% for review in reviews %}
         <div class="card">
@@ -73,6 +74,11 @@
         </div>
         {% endfor %}
     </div>
+    {% else %}
+    <div class="card-columns">
+        No reviews for this dealer. Add a review. 
+    </div>
+    {% endif %}
     </body>
 
 </html>

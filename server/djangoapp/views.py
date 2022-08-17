@@ -123,18 +123,16 @@ def get_dealers_by_state(request, state):
 # Create a `get_dealer_details` view to render the reviews of a dealer
 def get_dealer_details(request, dealer_id):
     context = {}
+    context['dealer_id'] = dealer_id
     if request.method == "GET":
         url = "https://6c22589a.us-south.apigw.appdomain.cloud/api/review"
         reviews = get_dealer_reviews_from_cf(url, dealer_id)
         if len(reviews) > 0:
-            context['reviews'] = reviews
+            context['reviews'] = reviews           
             reviewer_names = ' '.join([review.review for review in reviews])
             review_sentiments = ' '.join([review.sentiment for review in reviews])
         # return HttpResponse(reviewer_names + ' ' + review_sentiments)
-            return render(request, 'djangoapp/dealer_details.html', context)
-        
-        else:
-            return HttpResponse('<h1><failed/h1>')
+        return render(request, 'djangoapp/dealer_details.html', context)
 
 # Create a `add_review` view to submit a review
 def add_review(request, dealer_id):
@@ -143,7 +141,7 @@ def add_review(request, dealer_id):
         url = "https://6c22589a.us-south.apigw.appdomain.cloud/api/review"
         review = dict()
         review['purchase_date'] = request.POST['purchasedate']
-        review['dealership'] = 7
+        review['dealership'] = dealer_id
         review['review'] = request.POST['content']
         review['name'] = 'priyaDutta'
         review['purchase'] = request.POST['purchasecheck']
@@ -166,6 +164,7 @@ def add_review(request, dealer_id):
     elif request.method == 'GET':
         print('get request')
         context = {}
+        context['dealer_id'] = dealer_id
         carmakes = CarMake.objects.all()
         cars = []
         
@@ -183,8 +182,6 @@ def add_review(request, dealer_id):
                 carObj['year'] = yearcarmodel.value_from_object(model).strftime("%Y")
                 carObj['make'] = fieldobjcarmake.value_from_object(car)
                 cars.append(carObj)
-                print(carObj)
-                print(cars)
             #name = fieldobj.value_from_object(car)
             #print(name)
             
