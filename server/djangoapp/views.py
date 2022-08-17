@@ -144,13 +144,16 @@ def add_review(request, dealer_id):
         review['dealership'] = dealer_id
         review['review'] = request.POST['content']
         review['name'] = 'priyaDutta'
-        review['purchase'] = request.POST['purchasecheck']
+        if 'purchasecheck' in request.POST.keys():
+            review['purchase'] = True
+        else:
+            review['purchase'] = False
         review['car_make'] = 'audii'
         review['car_model'] = 'car'
         review['car_year'] = '2003'
         review['id'] = 12395789
         print("type of car")
-        print(request.POST['car'])
+        print(request.POST)
         json_payload = dict()
         json_payload['review'] = review
         postreview = post_request(url, json_payload=json_payload)
