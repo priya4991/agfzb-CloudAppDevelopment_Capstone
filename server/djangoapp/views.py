@@ -9,6 +9,7 @@ from django.contrib import messages
 from datetime import datetime
 import logging
 import json
+import random
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -148,10 +149,28 @@ def add_review(request, dealer_id):
             review['purchase'] = True
         else:
             review['purchase'] = False
-        review['car_make'] = 'audii'
-        review['car_model'] = 'car'
-        review['car_year'] = '2003'
-        review['id'] = 12395789
+
+        if request.POST['car'] == '0':
+            review['car_make'] = 'Audi'
+            review['car_model'] = 'Audi 1'
+            review['car_year'] = '2022'
+        elif request.POST['car'] == '1':
+            review['car_make'] = 'Audi'
+            review['car_model'] = 'Audi 2'
+            review['car_year'] = '2022'
+        elif request.POST['car'] == '2':
+            review['car_make'] = 'Audi'
+            review['car_model'] = 'Audi 3'
+            review['car_year'] = '2021'
+        elif request.POST['car'] == '3':
+            review['car_make'] = 'Mercedes'
+            review['car_model'] = 'Benz 1'
+            review['car_year'] = '2022'
+        elif request.POST['car'] == '4':
+            review['car_make'] = 'Mercedez'
+            review['car_model'] = 'Benz 2'
+            review['car_year'] = '2020'
+        review['id'] = (random.random() + 1) * 100000000
         print("type of car")
         print(request.POST)
         json_payload = dict()
