@@ -131,8 +131,8 @@ def analyze_review_sentiments(text):
     params['language'] = 'en'
     
 
-    url = ''
-    api_key = ''
+    url = 'https://api.eu-gb.natural-language-understanding.watson.cloud.ibm.com/instances/b67439c8-f8d0-4b64-b3f6-5f1e4ea4bb0d'
+    api_key = 'iWZOxv_uts4QxBHwLEJ-wf1gR44GY1FgUXMB1x1ZRq19'
     #response = requests.get(url, params=params, headers={'Content-Type': 'application/json'},
     #                                auth=HTTPBasicAuth('apikey', api_key))
     
